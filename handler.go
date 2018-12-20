@@ -94,7 +94,7 @@ func newHandler(config []byte) (*handler, error) {
 }
 
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	current := r.URL.Path
+	current := h.Host(r) + r.URL.Path
 	pc, subpath := h.paths.find(current)
 	if pc == nil && current == "/" {
 		h.serveIndex(w, r)
@@ -113,7 +113,7 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Display string
 		VCS     string
 	}{
-		Import:  h.Host(r) + pc.path,
+		Import:  pc.path,
 		Subpath: subpath,
 		Repo:    pc.repo,
 		Display: pc.display,
